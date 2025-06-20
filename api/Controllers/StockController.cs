@@ -64,8 +64,8 @@ namespace api.Controllers
                 return NotFound();
             }
 
-                return Ok(stockModel.ToStockDto());
-            }
+            return Ok(stockModel.ToStockDto());
+        }
 
         [HttpDelete]
         [Route("{id}")]
@@ -81,5 +81,8 @@ namespace api.Controllers
 
             return NoContent();
         }
+
+
+     
     }
 }
