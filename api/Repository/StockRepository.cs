@@ -49,7 +49,17 @@ namespace api.Repository
                 stocks = stocks.Where(s => s.Symbol.Contains(queryObject.Symbol));
             }
 
-            return await stocks.ToListAsync();
+            if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
+            {
+                if (queryObject.SortBy.Equals(("Symbol"), StringComparison.OrdinalIgnoreCase))
+                {
+                    stocks = queryObject.IsDecending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
+                }
+            }
+
+            var skipNumber = (queryObject.pageNumber - 1) * queryObject.PageSize;
+            
+            return await stocks.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
          
         }
 
