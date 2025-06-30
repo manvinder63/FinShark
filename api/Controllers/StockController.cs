@@ -7,6 +7,7 @@ using api.Dtos.Stock;
 using System.Xml.Linq;
 using api.Interfaces;
 using api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 namespace api.Controllers
 {
     [Route("api/stock")]
@@ -23,12 +24,13 @@ namespace api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject queryObject)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }   
+            }
             var stocks = await _stockRepo.GetAllAsync(queryObject);
             var stockdto = stocks.Select(s => s.ToStockDto());
 
