@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using api.Interfaces;
 using api.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +15,7 @@ namespace api.Service
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
+
         public TokenService(IConfiguration config)
         {
             _config = config;
@@ -22,7 +27,7 @@ namespace api.Service
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
-           };
+            };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

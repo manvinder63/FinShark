@@ -68,6 +68,11 @@ namespace api.Repository
             return await _context.Stock.Include(c => c.Comments).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Stock?> GetBySymbolAsync(string symbol)
+        {
+            return await _context.Stock.FirstOrDefaultAsync(s => s.Symbol == symbol);
+        }
+
         public async Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto updateDto)
         {
              var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
