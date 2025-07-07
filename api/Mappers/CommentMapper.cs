@@ -14,19 +14,19 @@ namespace api.Mappers
                 Title = commentModel.Title,
                 Content = commentModel.Content,
                 CreatedOn = commentModel.CreatedOn,
+                CreatedBy = commentModel.AppUser.UserName,
                 StockId = commentModel.StockId
             };
         }
 
         
-        public static Comment ToCommentFromCreateDTO(this CreateCommentRequestDto commentDto)
+        public static Comment ToCommentFromCreateDTO(this CreateCommentRequestDto commentDto, int stockId)
         {
             return new Comment
             {
                 Title = commentDto.Title,
                 Content = commentDto.Content,
-                CreatedOn = commentDto.CreatedOn,
-                StockId = commentDto.StockId
+                StockId = stockId
             };
         }
 

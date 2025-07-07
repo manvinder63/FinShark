@@ -38,7 +38,7 @@ namespace api.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
         {
-            var stocks = _context.Stock.Include(c => c.Comments).AsQueryable();
+            var stocks = _context.Stock.Include(c => c.Comments).ThenInclude(a => a.AppUser).AsQueryable();
             if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
             {
                 stocks = stocks.Where(s => s.CompanyName.Contains(queryObject.CompanyName));
@@ -72,10 +72,14 @@ namespace api.Repository
         {
             return await _context.Stock.FirstOrDefaultAsync(s => s.Symbol == symbol);
         }
+         public Task<bool> StockExists(int id)
+        {
+            return _context.Stock.AnyAsync(s => s.Id == id);
+        }
 
         public async Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto updateDto)
         {
-             var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+            var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
 
             if (stockModel == null)
             {
