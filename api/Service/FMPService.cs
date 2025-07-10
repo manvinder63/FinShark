@@ -21,14 +21,23 @@ namespace api.Service
         {
             try
             {
-                var result = await _httpClient.GetAsync($"https://site.financialmodelingprep.com/api/v3/profile/{symbol}?apiKey={_config["FMPKey"]}");
+                var apiKey = _config["FMPKey"];
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    throw new InvalidOperationException("FMPKey is missing from configuration.");
+                }
+                    var result = await _httpClient.GetAsync($"https://financialmodelingprep.com/stable/profile?symbol={symbol}&apikey={apiKey}");
+                
+                Console.WriteLine("1");
                 if (result.IsSuccessStatusCode)
                 {
+                    Console.WriteLine("2");
                     var content = await result.Content.ReadAsStringAsync();
                     var tasks = JsonConvert.DeserializeObject<FMPStock[]>(content);
                     var stock = tasks[0];
                     if (stock != null)
                     {
+                        Console.WriteLine("3");
                         return stock.ToStockFromFMP();
                     }
 
